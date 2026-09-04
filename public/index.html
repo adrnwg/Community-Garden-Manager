@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>The handy dandy garden manager</title>
+</head>
+<body>
+    <h1>WELCOME TO THE HANDY DANDY GARDEN MANAGER 9000</h1>
+    <!-- ===================================================================================== -->
+    <!-- Display the current status of the database connection. 
+         !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
+         -->
+    <h2>Database Connection Status: 
+        <!-- An in-line placeholder to display connection status. -->
+        <span id="dbStatus"> </span>
+        <!-- A loading GIF, will be hided once get the status. -->
+        <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">
+    </h2>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <!-- Show 'PlantingRecords'. 
+        Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Manage Planting Records</h2>
+    <details>
+        <summary>Click to open</summary>
+        <table id="recTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Style</th>
+                    <th>Amount</th>
+                    <th>Date Planted</th>
+                    <th>Expected Harvest Date</th>
+                    <th>BedID</th>
+                    <th>PlotID</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table><br>
+        <h3> Create new planting record </h3>
+        <form id="insertPlantRec">
+            ID: <input type="number" id="plantRecId" placeholder="Enter ID" required> <br><br>
+            How will you plant it?: <input type="text" id="plantStyle" placeholder="Tell us how you will plant it..." maxlength="100"> <br><br>
+            Amount: <input type="number" id="plantRecAmount" required> <br><br>
+            Date Planted: <input type="date" id="plantRecDate" value="2026-01-01"> <br><br>
+            Exp Harvest Date: <input type="date" id="recHarvDate" value="2026-12-31"> <br><br>
+            BedID: <input type="number" id="recFkBed" placeholder="Enter Associated Bed ID" required> <br><br>
+            PlotID: <input type="number" id="recFkPlot" placeholder="Enter Associated Plot ID" required> <br><br>
+            <button type="submit"> insert </button> <br>
+        </form>
+        <div id="insertPlantRecResultMsg"></div>
+        <br>
+        <h3> Available Beds </h3>
+        <table id="availableBeds" border="1">
+            <thead>
+                <tr>
+                    <th>BedID</th>
+                    <th>PlotID</th>
+                    <th>Fertilizer</th>
+                    <th>Width</th>
+                    <th>Length</th>
+                    <th>Height</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table><br>
+    </details>
+    <br><hr><br> <!-- ========================================================================= -->
+    <h2>Find the right bed for you!</h2>
+    <details>
+    <summary>Click to open</summary>
+    <table id="bedTable" border="1">
+        <thead>
+            <tr>
+                <th>BedID</th>
+                <th>PlotID</th>
+                <th>Fertilizer</th>
+                <th>Length</th>
+                <th>Width</th>
+                <th>Height</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    <form id="searchBed">
+        <div id="clauses"> <!-- Hold all clause selectors -->
+           <label for="firstClause">WHERE:</label> 
+           <div id="firstClause">
+                <select class = "attribute">
+                    <option value="PlotID">PlotID</option>
+                    <option value="BedID">BedID</option>
+                    <option value="FertilizerType">FertilizerType</option>
+                    <option value="Length">Length</option>
+                    <option value="Width">Width</option>
+                    <option value="Height">Height</option>
+                    <option value="None">No Clause</option>
+                </select>
+                =
+                <input type="text" class="equatee">
+            </div>
+        </div>
+        <br>
+        Refine your search: <button type="button" id="addClause"> add clause </button> <br>
+        <button type="submit"> search </button> <br>
+        <div id="bedSearchResultMsg"></div>
+        <br>
+    </form>
+    </details>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    <h2>Water Schedule Inspecter</h2>
+    <details>  
+    <summary>Click To Open</summary>  
+    <table id="scheduleTable" border="1">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    <h3> Please select which attributes you wish to view </h3>
+    <h4> The attributes will be displayed from left to right in ascending order. 0 is omitted </h4>
+    <form id="scheduleProjectForm">
+        <label for="waterScheduleID">ID:</label>
+        <select id="waterScheduleID" name="ScheduleID" class="waterAttribute">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <label for="waterFrequency">Frequency:</label>
+        <select id="waterFrequency" name="Frequency" class="waterAttribute">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <label for="waterAmount">Amount:</label>
+        <select id="waterAmount" name="Amount" class="waterAttribute">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <label for="waterStartTime">Start Time:</label>
+        <select id="waterStartTime" name="StartTime" class="waterAttribute">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <label for="waterTemp">Temperature:</label>
+        <select id="waterTemp" name="Temp" class="waterAttribute">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <button type="submit"> search </button><br>
+        <div id="projScheduleResultMsg"></div>
+    </form></details>
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Tool Shed Manager</h2>
+    <details>
+    <summary>Click to open</summary>
+    <h3>Tool Shed Info:</h3>
+    <table id="toolShedLocatedAtTable" border="1">
+        <thead>
+            <tr>
+                <th>ShedID</th>
+                <th>LastCleanDate</th>
+                <th>Capacity</th>
+                <th>NumTools</th>
+                <th>ConditionLevel</th>
+                <th>PlotID</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <form id="updateToolShedLocatedAt">
+        ShedID: <input type="number" id="updateToolShedLocatedAtShedID" placeholder="Enter ID" required> <br><br>
+        <label for="attributeName">Choose Attribute: </label>
+        <select id="attributeName" required> 
+            <option value="" disabled selected>Select: </option>
+            <option value="capacity">Capacity</option>
+            <option value="numTools">NumTools</option>
+            <option value="conditionLevel">ConditionLevel</option>
+            <option value="plotID">PlotID</option>
+        </select> <br>
+
+        <div id="toolShedLocatedAtFields"></div> <br>
+
+        <button type="submit">update</button> <br>
+    </form>
+    
+    <!-- A placeholder to display messages related to the update operation. -->
+    <div id="updateToolShedLocatedAtResultMsg"></div><br>
+    </details>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Find Total Profit Per Harvest Day</h2>
+    <details>
+    <summary>Click to open</summary>
+    <button id="harvestTotal"> Find </button><br>
+    <br><table id="harvestSumTable" border="1" style="display: none;">
+        <thead>
+            <tr>
+                <th>HarvestDate</th>
+                <th>Total Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    </details>
+    
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Crop Analyzer</h2>
+    <details>    
+    <summary>Click to open</summary>
+    <h3>Find The Harvest Date, Weight, and Value of a Crop</h3>
+    <br><table id="harvestGivenCropTable" border="1" style="display: none;">
+        <thead>
+            <tr>
+                <th>HarvestDate</th>
+                <th>Weight</th>
+                <th>Value</th>
+                <th>CropName</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    <form id="findHarvestGivenCrop">
+        CropName: <input type="text" id="findHarvestCropName" placeholder="Enter a CropName" required maxlength="50"> <br><br>
+        <button type="submit"> Find </button> <br>
+    </form>
+    <br><div id="findHarvestGivenCropResultMsg"></div>
+    <h3>Current Crop Table</h3>
+    <table id="cropTable" border="1">
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>CropName</th>
+                <th>GrowingSeason</th>
+                <th>CropUsage</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br></details>
+    
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Find Greedy Gardeners</h2>
+    <details>
+    <summary>Click to open</summary>
+    <h3>Finds The Gardeners Renting More Than One Plot</h3>
+    <button id="findGardenersMoreThanOnePlot"> Find </button> <br>
+    <br><table id="gardenersMoreThanOnePlotTable" border="1" style="display: none;">
+        <thead>
+            <tr>
+                <th>GardenerID</th>
+                <th>First Name</th>
+                <th>Email</th>
+                <th>ResidenceUnitNum</th>
+                <th>Number Of Plots</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    </details>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Equipment Condition Tracker</h2>
+    <details>
+    <summary>Click to open</summary>
+    <h3>Find The Lowest Average Equipment Condition By Shed</h3>
+    <button id="findLowestAvgEquipmentConditionByShed"> Find </button> <br>
+    <br><table id="lowestAvgEquipmentConditionByShedTable" border="1" style="display: none;">
+        <thead>
+            <tr>
+                <th>ShedID</th>
+                <th>EquipmentType</th>
+                <th>Average Condition Level</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+    </details>
+    
+    <br><hr><br> <!-- ============================GARDENER SECTION============================ !!!-->
+    
+    <section> 
+        <h2>Gardener Manager</h2>
+        <details>
+            <summary>Click to open</summary>
+            <table id="gardenerTable" border="1">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Residence Unit Number</th>
+                    <th>Gardener ID</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <details>
+            <summary>Insert Gardener</summary>
+            <form id="insertGardener">
+                First Name: <input type="text" id="gardenerInsertFirstName" placeholder="Enter First Name" required> <br><br>
+                Last Name: <input type="text" id="gardenerInsertLastName" placeholder="Enter Last Name" required> <br><br>
+                Residence Unit Number: <input type="number" id="gardenerInsertResidenceUnitNum" placeholder="Enter Residence Unit Number" required> <br><br>
+                Gardener ID: <input type="number" id="gardenerInsertID" placeholder="Enter Gardener ID" required> <br><br>
+                Email: <input type="email" id="gardenerInsertEmail" placeholder="Enter Email" required> <br><br>
+                <button type="submit"> insert </button> <br>
+            </form>
+            <div id="gardenerInsertResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Update Gardener</summary>
+            <p> Updates first/last names and residence unit number. Email cannot be changed here</p>
+            <form id="updateGardener">
+                First Name: <input type="text" id="gardenerUpdateFirstName" placeholder="Enter First Name" required> <br><br>
+                Last Name: <input type="text" id="gardenerUpdateLastName" placeholder="Enter Last Name" required> <br><br>
+                Residence Unit Number: <input type="number" id="gardenerUpdateResidenceUnitNum" placeholder="Enter Residence Unit Number" required> <br><br>
+                Gardener ID: <input type="number" id="gardenerUpdateID" placeholder="Enter Gardener ID" required> <br><br>
+                <button type="submit"> update </button> <br>
+            </form>
+            <div id="gardenerUpdateResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Delete Gardener</summary>
+            <form id="deleteGardener">
+                Gardener ID: <input type="number" id="gardenerDeleteID" placeholder="Enter Gardener ID" required> <br><br>
+                <button type="submit"> delete </button> <br>
+            </form>
+            <div id="gardenerDeleteResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Find Gardeners Renting All Plots</summary>
+            <p>Finds every gardener who currently rents all indoor/outdoor plots</p>
+            <label>
+                <input type="radio" name="plotTypeQuery" id="divisionIndoor" value="1" checked> Indoor
+            </label>
+            <label>
+                <input type="radio" name="plotTypeQuery" id="divisionOutdoor" value="0"> Outdoor
+            </label>
+            <br><br>
+            <button id="runDivisionQuery">Find Gardeners</button>
+            <ul id="divisionResultList"></ul>
+            <div id="divisionResultMsg"></div>
+        </details>
+    </details>
+    </section>    
+
+    <br><hr><br> 
+    <!-- ============================PLOT SECTION============================ -->
+    <section>
+        <h2>Plot Manager</h2>
+        <details>
+            <summary>Click to open</summary>
+            <table id="plotTable" border="1">
+            <thead>
+                <tr>
+                    <th>Plot Size</th>
+                    <th>Is Available</th>
+                    <th>Plot ID</th>
+                    <th>Is Indoor</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <details>
+            <summary>Insert Plot</summary>
+            <form id="insertPlot">
+                Plot Size: <input type="number" id="plotInsertSize" placeholder="Enter Plot Size"> <br><br>
+                Is Available: <input type="checkbox" id="plotInsertIsAvailable" checked> <br><br>
+                Plot ID: <input type="number" id="plotInsertId" placeholder="Enter Plot ID" required> <br><br>
+                Is Indoor: <input type="checkbox" id="plotInsertIsIndoor"> <br><br>
+                <button type="submit"> insert </button> <br>
+            </form>
+            <div id="plotInsertResultMsg"></div>
+        </details>
+        </details>
+    </section>
+        
+    <br><hr><br>
+
+     <!-- ============================EQUIPMENT SECTION============================ -->
+    <section>
+        <h2>Equipment Manager</h2>
+        <details>
+            <summary>Click to open</summary>
+            <table id="equipmentTable" border="1">
+            <thead>
+                <tr>
+                    <th>Equipment ID</th>
+                    <th>Purchase Date</th>
+                    <th>Equipment Type</th>
+                    <th>Shed ID</th>
+                    <th>Condition Level</th>
+                    <th>Gardener ID</th>
+                    <th>Equipment Type Attributes</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <details>
+            <summary>Insert Equipment</summary>
+            <form id="insertEquipment">
+                Equipment ID: <input type="number" id="equipmentInsertId" placeholder="Enter Equipment ID" required> <br><br>
+                Purchase Date: <input type="date" id="equipmentInsertPurchaseDate" required> <br><br>
+                Equipment Type: <input type="text" id="equipmentInsertType" placeholder="Enter Equipment Name" required> <br><br>
+                Shed ID: <input type="number" id="equipmentInsertShedId" placeholder="Blank if not in a shed"> <br><br>
+                Condition Level: <input type="number" id="equipmentInsertConditionLevel" placeholder="Enter Condition Level"> <br><br>
+                Gardener ID: <input type="number" id="equipmentInsertGardenerId" placeholder="Blank if not checked out"> <br><br>
+                Equipment Name:
+                <select id="equipmentInsertName">
+                    <option value="Other">Other</option>
+                    <option value="GardenHoe">Garden Hoe</option>
+                    <option value="WateringCan">Watering Can</option>
+                    <option value="Shovel">Shovel</option>
+                    <option value="Pruner">Pruner</option>
+                </select> <br><br>
+                Equipment Type Attributes: 
+                <fieldset id="fieldsGardenHoe" class="type-fields" hidden>
+                    <legend>Garden Hoe Attributes</legend>
+                    Plots Tilled: <input type="number" id="gardenHoePlotsTilled" placeholder="Enter Plots Tilled"> <br><br>
+                    Tool Size: <input type="number" id="gardenHoeToolSize" placeholder="Enter Tool Size"> <br><br>
+                    Date Last Sharpened: <input type="date" id="gardenHoeDateLastSharpened"> <br><br>
+                </fieldset>
+
+                <fieldset id="fieldsWateringCan" class="type-fields" hidden>
+                    <legend>Watering Can Attributes</legend>
+                    Max Volume: <input type="number" id="wateringCanMaxVolume" placeholder="Enter Max Volume"> <br><br>
+                    Spout: <input type="text" id="wateringCanSpout" placeholder="Enter Spout"> <br><br>
+                    Material: <input type="text" id="wateringCanMaterial" placeholder="Enter Material"> <br><br>
+                </fieldset>
+
+                <fieldset id="fieldsShovel" class="type-fields" hidden>
+                    <legend>Shovel Attributes</legend>
+                    Manufacturer: <input type="text" id="shovelManufacturer" placeholder="Enter Manufacturer"> <br><br>
+                    Shape: <input type="text" id="shovelShape" placeholder="Enter Shape"> <br><br>
+                    Shaft Length: <input type="number" id="shovelShaftLength" placeholder="Enter Shaft Length"> <br><br>
+                </fieldset>
+
+                <fieldset id="fieldsPruner" class="type-fields" hidden>
+                    <legend>Pruner Attributes</legend>
+                    Manufacturer: <input type="text" id="prunerManufacturer" placeholder="Enter Manufacturer"> <br><br>
+                    Tool Size: <input type="number" id="prunerToolSize" placeholder="Enter Tool Size"> <br><br>
+                    Type: <input type="text" id="prunerType" placeholder="Enter Type"> <br><br>
+                </fieldset>
+                <br><br>
+                <button type="submit"> insert </button> <br>
+            </form>
+            <div id="equipmentInsertResultMsg"></div>
+        </details>
+        
+        <details>
+            <summary>Delete Equipment</summary>
+            <form id="deleteEquipment">
+                Equipment ID: <input type="number" id="equipmentDeleteId" placeholder="Enter Equipment ID" required> <br><br>
+                <button type="submit"> delete </button> <br>
+            </form>
+            <div id="equipmentDeleteResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Checkout Equipment</summary>
+            <p>Assigns gardener to available equipment</p>
+            <form id="checkoutEquipment">
+                Gardener ID: <input type="number" id="equipmentCheckoutGardenerId" placeholder="Enter Gardener ID" required> <br><br>
+                Equipment ID: <input type="number" id="equipmentCheckoutId" placeholder="Enter Equipment ID" required> <br><br>
+                <button type="submit"> checkout </button> <br>
+            </form>
+            <div id="checkoutEquipmentResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Return Equipment</summary>
+            <p>Returns equipment checked out by a gardener</p>
+            <form id="returnEquipment">
+                Gardener ID: <input type="number" id="equipmentReturnGardenerId" placeholder="Enter Gardener ID" required> <br><br>
+                Equipment ID: <input type="number" id="equipmentReturnId" placeholder="Enter Equipment ID" required> <br><br>
+                <button type="submit"> return </button> <br>
+            </form>
+            <div id="returnEquipmentResultMsg"></div>
+        </details>
+        </details>
+    </section>
+
+    <br><hr><br>
+     <!-- ============================RENTS SECTION============================ -->
+     <section>
+        <h2>Plot Rental</h2>
+        <details>
+            <summary>Click to open</summary>
+            <table id="rentsTable" border="1">
+            <thead>
+                <tr>
+                    <th>Gardener ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Plot ID</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <details>
+            <summary>Rent Plot</summary>
+            <p> Assigns a gardener to a plot</p>
+            <form id="rentPlot">
+                Gardener ID: <input type="number" id="rentGardenerID" placeholder="Enter Gardener ID" required> <br><br>
+                Plot ID: <input type="number" id="rentPlotID" placeholder="Enter Plot ID" required> <br><br>
+                <button type="submit"> rent </button> <br>
+            </form>
+            <div id="rentPlotResultMsg"></div>
+        </details>
+
+        <details>
+            <summary>Return Plot</summary>
+            <p> Removes a gardener's rental on a plot</p>
+            <form id="returnPlot">
+                Gardener ID: <input type="number" id="returnGardenerID" placeholder="Enter Gardener ID" required> <br><br>
+                Plot ID: <input type="number" id="returnPlotID" placeholder="Enter Plot ID" required> <br><br>
+                <button type="submit"> return </button> <br>
+            </form>
+            <div id="returnPlotResultMsg"></div>
+        </details>
+        </details>
+    </section>
+
+    <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+    <script src="scripts.js"></script>
+</body>
+</html>

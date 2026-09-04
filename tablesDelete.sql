@@ -1,0 +1,40 @@
+-- Relationships --
+DROP TABLE Logs;
+DROP TABLE Taken;
+DROP TABLE PlantedIn;
+DROP TABLE Records;
+DROP TABLE Rents;
+DROP TABLE AssignedTo;
+DROP TABLE Oversees;
+
+-- Isa --
+DROP TABLE GardenHoe;
+DROP TABLE WateringCan;
+DROP TABLE Shovel;
+DROP TABLE Pruner;
+DROP TABLE StoresAndCheckedOutEquipment2;
+DROP TABLE StoresAndCheckedOutEquipment1;
+
+-- Objects --
+DROP TABLE ToolShedLocatedAt2;
+DROP TABLE ToolShedLocatedAt1;
+DROP TABLE PlantingRecordTracks;
+DROP TABLE BedContains;
+DROP TABLE Plot;
+DROP TABLE HarvestYields1;
+DROP TABLE HarvestYields2;
+DROP TABLE Gardener4;
+DROP TABLE Gardener3;
+DROP TABLE Gardener2;
+DROP TABLE WaterSchedule1;
+DROP TABLE WaterSchedule2;
+DROP TABLE Crop1;
+DROP TABLE Crop2;
+
+-- Views --
+DROP VIEW WATERSCHEDULEFULL;
+DROP VIEW TOOLSHEDLOCATEDATFULL;
+DROP VIEW HARVESTYIELDSFULL;
+DROP VIEW CROPFULL;
+DROP VIEW GARDENERFULL;
+DROP VIEW STORESANDCHECKEDOUTEQUIPMENTFULL;
